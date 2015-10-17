@@ -28,5 +28,8 @@
   },
   "dependencies": {
     "when": "3.7.3"
+  },
+  "bin": {
+    "changelog": "./bin/issues-changelog.js"
   }
 }

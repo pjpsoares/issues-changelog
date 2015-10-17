@@ -1,8 +1,8 @@
 'use strict';
 
-var gitService = require('git-service');
-var commitsParser = require('commits-parser');
-var changelog = require('changelog');
+var gitService = require('./services/git-service');
+var commitsParser = require('./services/commits-parser');
+var changelog = require('./services/changelog');
 
 function filterCommits(commits) {
     return commits.filter(commitsParser.isCommitValid);
