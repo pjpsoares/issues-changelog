@@ -25,5 +25,8 @@
   "homepage": "https://github.com/pjpsoares/issues-changelog",
   "devDependencies": {
     "eslint": "^1.7.1"
+  },
+  "dependencies": {
+    "when": "3.7.3"
   }
 }
