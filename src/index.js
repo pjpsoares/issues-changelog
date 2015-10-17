@@ -5,23 +5,23 @@ var commitsParser = require('./services/commits-parser');
 var changelog = require('./services/changelog');
 
 function filterCommits(commits) {
-    return commits.filter(commitsParser.isCommitValid);
+    return commits && commits.filter(commitsParser.isCommitValid);
 }
 
 function mapCommits(commits) {
-    return commits.map(commitsParser.mapCommit);
+    return commits && commits.map(commitsParser.mapCommit);
 }
 
 function sortCommits(commits) {
-    return commits.sortBy(commitsParser.compareCommits);
+    return commits && commits.sortBy(commitsParser.compareCommits);
 }
 
 function groupCommits(commits) {
-    return commitsParser.group(commits);
+    return commits && commitsParser.group(commits);
 }
 
 function getCommits(tags) {
-    return gitService.getCommits(tags && tags.last());
+    return gitService.getCommits(tags && tags[tags.length - 1]);
 }
 
 function generateChangelog() {
