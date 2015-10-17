@@ -1,0 +1,29 @@
+{
+  "name": "issues-changelog",
+  "version": "0.0.1",
+  "description": "A changelog generator based on the issues marked on the commit messages.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "node node_modules/eslint/bin/eslint.js src/ tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pjpsoares/issues-changelog.git"
+  },
+  "keywords": [
+    "changelog",
+    "gitlab",
+    "git",
+    "node"
+  ],
+  "author": "Paulo Soares",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pjpsoares/issues-changelog/issues"
+  },
+  "homepage": "https://github.com/pjpsoares/issues-changelog",
+  "devDependencies": {
+    "eslint": "^1.7.1"
+  }
+}
