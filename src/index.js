@@ -13,7 +13,7 @@ function mapCommits(commits) {
 }
 
 function sortCommits(commits) {
-    return commits && commits.sortBy(commitsParser.compareCommits);
+    return commits && commits.sort(commitsParser.compareCommits);
 }
 
 function groupCommits(commits) {
