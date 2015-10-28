@@ -8,9 +8,11 @@ var semverValid = require('semver').valid;
 var template = require('lodash/string/template');
 var trim = require('lodash/string/trim');
 var getTagsCmd = 'git tag --sort version:refname';
-var getCommitsCmdTemplate =
+var getTagsIntervalPartialCmdFromTemplate =
+    template('"<%- fromTag ? fromTag + ".." : "" %><%= toTag %>"');
+var getCommitsCmdFromTemplate =
     template('git log --format="<%= format %>' + COMMITS_SEPARATOR + '"' +
-        ' "<%- fromTag ? fromTag + ".." : "" %><%= toTag %>"');
+        ' <%= tagsInterval %>');
 
 function processExecResponse(data) {
     return data[0];
@@ -28,9 +30,10 @@ function getTags() {
 }
 
 function getCommits(fromTag, toTag) {
-    var getCommitsCmd = getCommitsCmdTemplate({
-        fromTag: fromTag,
-        toTag: toTag,
+    var tagsInterval = fromTag || toTag ?
+        getTagsIntervalPartialCmdFromTemplate(fromTag, toTag) : '';
+    var getCommitsCmd = getCommitsCmdFromTemplate({
+        tagsInterval: tagsInterval,
         format: DEFAULT_FORMAT
     });
 
@@ -52,4 +55,4 @@ function getCommits(fromTag, toTag) {
 module.exports = {
     getTags: getTags,
     getCommits: getCommits
-}
+};
