@@ -20,7 +20,7 @@ function createGitlabClient() {
 
     return {
         getIssue: getIssue
-    }
+    };
 }
 
 module.exports = createGitlabClient();
