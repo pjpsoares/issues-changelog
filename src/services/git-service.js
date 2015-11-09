@@ -8,6 +8,7 @@ var semverValid = require('semver').valid;
 var template = require('lodash/string/template');
 var trim = require('lodash/string/trim');
 var getTagsCmd = 'git tag --sort version:refname';
+var getRepositoryUrlCmd = 'git remote show origin';
 var getTagsIntervalPartialCmdFromTemplate =
     template('"<%- fromTag ? fromTag + ".." : "" %><%= toTag %>"');
 var getCommitsCmdFromTemplate =
@@ -52,7 +53,12 @@ function getCommits(fromTag, toTag) {
         });
 }
 
+function getRepositoryUrl() {
+    return execAsPromise(getRepositoryUrlCmd);
+}
+
 module.exports = {
     getTags: getTags,
-    getCommits: getCommits
+    getCommits: getCommits,
+    getRepositoryUrl: getRepositoryUrl
 };

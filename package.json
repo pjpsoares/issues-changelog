@@ -27,7 +27,9 @@
     "eslint": "^1.7.1"
   },
   "dependencies": {
+    "github": "^0.2.4",
     "gitlab": "^1.4.1",
+    "lodash": "^3.10.1",
     "semver": "^5.0.3",
     "when": "3.7.3"
   },
