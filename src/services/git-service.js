@@ -32,7 +32,10 @@ function getTags() {
 
 function getCommits(fromTag, toTag) {
     var tagsInterval = fromTag || toTag ?
-        getTagsIntervalPartialCmdFromTemplate(fromTag, toTag) : '';
+        getTagsIntervalPartialCmdFromTemplate({
+            fromTag: fromTag,
+            toTag: toTag
+        }) : '';
     var getCommitsCmd = getCommitsCmdFromTemplate({
         tagsInterval: tagsInterval,
         format: DEFAULT_FORMAT
