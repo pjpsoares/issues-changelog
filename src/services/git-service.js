@@ -5,15 +5,14 @@ var DEFAULT_FORMAT = '%B';
 var nodefn = require('when/node');
 var execAsPromise = nodefn.lift(require('child_process').exec);
 var semverValid = require('semver').valid;
-var template = require('lodash/string/template');
-var trim = require('lodash/string/trim');
+var _ = require('lodash');
 var getTagsCmd = 'git tag --sort version:refname';
-var getRepositoryUrlCmd = 'git remote show origin';
+var getRepositoryUrlCmd = 'git config --get remote.origin.url';
 var getTagsIntervalPartialCmdFromTemplate =
-    template('"<%- fromTag ? fromTag + ".." : "" %><%= toTag %>"');
+    _.template('"<%- fromTag ? fromTag + ".." : "" %><%= toTag %>"');
 var getCommitsCmdFromTemplate =
-    template('git log --format="<%= format %>' + COMMITS_SEPARATOR + '"' +
-        ' <%= tagsInterval %>');
+    _.template('git log --format="<%= format %>' + COMMITS_SEPARATOR + '"' + ' <%= tagsInterval %>');
+var GIT_REPO_REGEX = /\/|:([^\/]*)\/([^\/]*).git$/m;
 
 function processExecResponse(data) {
     return data[0];
@@ -47,7 +46,7 @@ function getCommits(fromTag, toTag) {
             return commitsString.split(COMMITS_SEPARATOR);
         })
         .then(function trimDownCommits(commits) {
-            return commits.map(trim);
+            return commits.map(_.trim);
         })
         .then(function cleanUpEmptyCommits(commits) {
             return commits.filter(function unity(commit) {
@@ -57,11 +56,29 @@ function getCommits(fromTag, toTag) {
 }
 
 function getRepositoryUrl() {
-    return execAsPromise(getRepositoryUrlCmd);
+    return execAsPromise(getRepositoryUrlCmd)
+        .then(function extractRepositoryUrl(repositoryUrlCmdResponse) {
+            return repositoryUrlCmdResponse[0];
+        });
+}
+
+function extractInfoFromUrl(gitUrl) {
+    var splitUrl = gitUrl.match(GIT_REPO_REGEX);
+
+    return splitUrl && {
+        user: splitUrl[1],
+        repo: splitUrl[2]
+    };
+}
+
+function getRepositoryInfo() {
+    return getRepositoryUrl()
+        .then(extractInfoFromUrl);
 }
 
 module.exports = {
     getTags: getTags,
     getCommits: getCommits,
-    getRepositoryUrl: getRepositoryUrl
+    getRepositoryUrl: getRepositoryUrl,
+    getRepositoryInfo: getRepositoryInfo
 };

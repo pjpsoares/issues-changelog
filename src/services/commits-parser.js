@@ -1,6 +1,7 @@
 'use strict';
 
 var COMMIT_REGEX = /^#(\d+)/m;
+var _ = require('lodash');
 
 function mapCommit(commit) {
     // We extract the issue id as it's the only thing relevant for us
@@ -22,7 +23,7 @@ function isCommitValid(commit) {
 }
 
 function group(commits) {
-    return commits;
+    return _.uniqBy(commits, 'issueId');
 }
 
 module.exports = {
@@ -30,4 +31,4 @@ module.exports = {
     compareCommits: compareCommits,
     isCommitValid: isCommitValid,
     group: group
-}
+};

@@ -3,6 +3,8 @@
 var gitService = require('./services/git-service');
 var commitsParser = require('./services/commits-parser');
 var changelog = require('./services/changelog');
+var when = require('when');
+var commitsDecoratorFactory = require('./services/commits-decorator');
 
 function mapCommits(commits) {
     return commits && commits.map(commitsParser.mapCommit);
@@ -14,6 +16,21 @@ function filterCommits(commits) {
 
 function sortCommits(commits) {
     return commits && commits.sort(commitsParser.compareCommits);
+}
+
+function decorateCommits(commits) {
+    if (!commits || !commits.length) {
+        return;
+    }
+
+    return gitService.getRepositoryInfo()
+        .then(function decorateWithRepoInfo(repoInfo) {
+            var commitsDecorator = commitsDecoratorFactory(
+                repoInfo.user, repoInfo.repo
+            );
+
+            return when.all(commits.map(commitsDecorator.decorateCommit));
+        });
 }
 
 function groupCommits(commits) {
@@ -30,6 +47,7 @@ function generateChangelog() {
         .then(mapCommits)
         .then(filterCommits)
         .then(groupCommits)
+        .then(decorateCommits)
         .then(sortCommits)
         .then(changelog.write);
 }
