@@ -4,12 +4,12 @@ var gitService = require('./services/git-service');
 var commitsParser = require('./services/commits-parser');
 var changelog = require('./services/changelog');
 
-function filterCommits(commits) {
-    return commits && commits.filter(commitsParser.isCommitValid);
-}
-
 function mapCommits(commits) {
     return commits && commits.map(commitsParser.mapCommit);
+}
+
+function filterCommits(commits) {
+    return commits && commits.filter(commitsParser.isCommitValid);
 }
 
 function sortCommits(commits) {
