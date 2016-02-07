@@ -41,6 +41,10 @@ function getCommits(tags) {
     return gitService.getCommits(tags && tags[tags.length - 1]);
 }
 
+function writeChangelog(commits) {
+    return commits && changelog.write(commits);
+}
+
 function generateChangelog() {
     return gitService.getTags()
         .then(getCommits)
@@ -49,7 +53,7 @@ function generateChangelog() {
         .then(groupCommits)
         .then(decorateCommits)
         .then(sortCommits)
-        .then(changelog.write);
+        .then(writeChangelog);
 }
 
 module.exports = {

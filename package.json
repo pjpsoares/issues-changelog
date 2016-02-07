@@ -27,8 +27,10 @@
     "eslint": "^1.7.1"
   },
   "dependencies": {
+    "fs-promise": "^0.4.1",
     "github": "^0.2.4",
     "gitlab": "^1.4.1",
+    "handlebars": "^4.0.5",
     "lodash": "^4.2.1",
     "semver": "^5.0.3",
     "when": "3.7.3"
