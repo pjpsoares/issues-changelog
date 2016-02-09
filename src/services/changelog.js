@@ -12,7 +12,7 @@ function readTemplate() {
         });
 }
 
-function write(commits) {
+function write(preset, templateFileName, commits) {
     return readTemplate()
         .then(function writeFile(template) {
             var compiledTemplate = handlebars.compile(template);

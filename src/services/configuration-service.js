@@ -2,6 +2,21 @@
 
 var fsp = require('fs-promise');
 var DEFAULT_CONFIGURATION_FILE_NAME = '.changelog';
+var DEFAULT_CONFIGURATION = {
+    mapBy: '',
+    filterBy: undefined,
+    groupBy: 'issueId',
+    issueTracker: 'github',
+    sortBy: undefined,
+    templatePreset: 'default',
+    templateFile: undefined
+};
+var _ = require('lodash');
+
+function extendDefaultConfiguration(configuration) {
+    return _.assign({}, DEFAULT_CONFIGURATION,
+        configuration && JSON.parse(configuration.toString()));
+}
 
 function load(configurationFileName) {
     configurationFileName = configurationFileName || DEFAULT_CONFIGURATION_FILE_NAME;
@@ -10,9 +25,7 @@ function load(configurationFileName) {
         .then(function (fileExists) {
             return fileExists ? fsp.readFile(configurationFileName) : undefined;
         })
-        .then(function extractConfiguration(configuration) {
-            return configuration ? JSON.parse(configuration.toString()) : {};
-        });
+        .then(extendDefaultConfiguration);
 }
 
 module.exports = {

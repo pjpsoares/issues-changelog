@@ -8,15 +8,7 @@ var commitsDecoratorFactory = require('./services/commits-decorator');
 var configurationService = require('./services/configuration-service');
 
 function mapCommits(mapBy, commits) {
-    return commits && commits.map(commitsParser.mapCommit);
-}
-
-function filterCommits(filterBy, commits) {
-    return commits && commits.filter(commitsParser.isCommitValid);
-}
-
-function sortCommits(sortBy, commits) {
-    return commits && commits.sort(commitsParser.compareCommits);
+    return commits && commits.map(commitsParser.mapCommit.bind(this, mapBy));
 }
 
 function decorateCommits(issueTracker, commits) {
@@ -34,14 +26,6 @@ function decorateCommits(issueTracker, commits) {
         });
 }
 
-function groupCommits(groupBy, commits) {
-    return commits && commitsParser.group(commits);
-}
-
-function writeChangelog(preset, templateFileName, commits) {
-    return commits && changelog.write(commits);
-}
-
 function getCommits(tags) {
     return gitService.getCommits(tags && tags[tags.length - 1]);
 }
@@ -52,11 +36,11 @@ function generateChangelog() {
             return gitService.getTags()
                 .then(getCommits)
                 .then(mapCommits.bind(this, configuration.mapBy))
-                .then(filterCommits.bind(this, configuration.filterBy))
-                .then(groupCommits.bind(this, configuration.groupBy))
+                .then(commitsParser.filterCommits.bind(this, configuration.filterBy))
+                .then(commitsParser.unique.bind(this, configuration.uniqueBy))
                 .then(decorateCommits.bind(this, configuration.issueTracker))
-                .then(sortCommits.bind(this, configuration.sortBy))
-                .then(writeChangelog.bind(this, configuration.preset, configuration.template));
+                .then(commitsParser.sortCommits.bind(this, configuration.sortBy))
+                .then(changelog.write.bind(this, configuration.preset, configuration.template));
         })
         .catch(function (error) {
             process.stdout.write(error.stack + '\n');

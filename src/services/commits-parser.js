@@ -1,34 +1,47 @@
 'use strict';
 
-var COMMIT_REGEX = /^#(\d+)/m;
 var _ = require('lodash');
+var ISSUE_ID_FIELD = 'issueId';
+var MAP_BY_DEFAULT = {
+    regex: '^#(\\d+)',
+    mapTo: [ISSUE_ID_FIELD]
+};
 
-function mapCommit(commit) {
-    // We extract the issue id as it's the only thing relevant for us
-    var parsedCommit = commit.match(COMMIT_REGEX);
+function mapCommit(mapBy, commit) {
+    mapBy = mapBy || MAP_BY_DEFAULT;
 
-    return parsedCommit && {
-        issueId: parsedCommit[1]
-    };
+    var parsedCommit = commit.match(new RegExp(mapBy.regex, 'm'));
+    var mappedCommit = {};
+
+    if (!parsedCommit) {
+        return mappedCommit;
+    }
+
+    _.forEach(mapBy.mapTo, function mapToResult(value, index) {
+        mappedCommit[value] = parsedCommit[index+1]; // +1 as the first occurrence is for the complete match
+    });
+
+    return mappedCommit;
 }
 
-function compareCommits() {
-    // We just want to maintain the order
-    return 0;
+function sortCommits(sortByField, commits) {
+    return sortByField ? commits : _.sortBy(commits, sortByField);
 }
 
-function isCommitValid(commit) {
-    // Ignore everything that's not on the expected format
-    return commit && commit.issueId;
+function filterCommits(filterBy, commits) {
+    filterBy = filterBy || ISSUE_ID_FIELD;
+    return _.filter(commits, filterBy);
 }
 
-function group(commits) {
-    return _.uniqBy(commits, 'issueId');
+function unique(uniqueBy, commits) {
+    uniqueBy = uniqueBy || ISSUE_ID_FIELD;
+
+    return _.uniqBy(commits, uniqueBy);
 }
 
 module.exports = {
     mapCommit: mapCommit,
-    compareCommits: compareCommits,
-    isCommitValid: isCommitValid,
-    group: group
+    sortCommits: sortCommits,
+    filterCommits: filterCommits,
+    unique: unique
 };
