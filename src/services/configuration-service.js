@@ -1,7 +1,7 @@
 'use strict';
 
 var fsp = require('fs-promise');
-var DEFAULT_CONFIGURATION_FILE_NAME = '.changelog';
+var DEFAULT_CONFIGURATION_FILE_NAME = 'changelog.json';
 var DEFAULT_CONFIGURATION = {
     mapBy: '',
     filterBy: undefined,
