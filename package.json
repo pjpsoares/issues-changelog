@@ -4,7 +4,8 @@
   "description": "A changelog generator based on the issues marked on the commit messages.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha \"tests/unit/**/*-spec.js\"",
+    "test-dev": "mocha \"tests/unit/**/*-spec.js\" -w",
     "lint": "node node_modules/eslint/bin/eslint.js src/ tests/"
   },
   "repository": {
@@ -24,7 +25,11 @@
   },
   "homepage": "https://github.com/pjpsoares/issues-changelog",
   "devDependencies": {
-    "eslint": "^1.7.1"
+    "chai": "^3.5.0",
+    "eslint": "^1.7.1",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
   },
   "dependencies": {
     "fs-promise": "^0.4.1",
