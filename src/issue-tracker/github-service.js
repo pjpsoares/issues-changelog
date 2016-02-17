@@ -10,6 +10,13 @@ var DEFAULT_GITHUB_OPTIONS = {
 };
 
 function createGitHubClient(user, repository, options) {
+    if (!user) {
+        throw new Error('You need a valid user for the github repo.');
+    }
+    if (!repository) {
+        throw new Error('You need a valid repository for the github repo.');
+    }
+
     var github = new GitHubApi(options || DEFAULT_GITHUB_OPTIONS);
     var getRepoIssue = nodefn.lift(github.issues.getRepoIssue);
 
