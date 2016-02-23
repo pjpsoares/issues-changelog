@@ -14,13 +14,14 @@ function readTemplate() {
         });
 }
 
-function write(preset, templateFileName, commits) {
+function write(preset, templateFileName, tag, commits) {
     return readTemplate()
         .then(function writeFile(template) {
             var compiledTemplate = handlebars.compile(template);
 
             return prependFile(CHANGELOG_FILE_NAME, compiledTemplate({
-                commits: commits
+                commits: commits,
+                tag: tag
             }));
         });
 }
