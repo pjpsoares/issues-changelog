@@ -24,7 +24,7 @@ function generateChangelogWithInfo(configuration, tags) {
     var currentTag = tags && tags[tags.length - 1];
     var previousTag = tags && tags[tags.length - 2];
 
-    return generateCommits(previousTag)
+    return generateCommits(configuration, previousTag)
         .then(changelog.write.bind(this, configuration.preset, configuration.template, currentTag));
 }
 
