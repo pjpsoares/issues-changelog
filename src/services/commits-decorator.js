@@ -40,7 +40,7 @@ function createCommitsDecoratorForJira(options) {
             .then(function decorateWithGithubIssue(jiraIssue) {
                 return _.assign({}, commit, {
                     title: jiraIssue.fields.summary,
-                    link: jiraIssue.self
+                    link: 'https://' + options.host + '/browse/' + jiraIssue.key
                 });
             });
     }
